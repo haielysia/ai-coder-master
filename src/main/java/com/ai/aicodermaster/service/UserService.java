@@ -1,9 +1,14 @@
 package com.ai.aicodermaster.service;
 
+import com.ai.aicodermaster.model.dto.UserQueryRequest;
 import com.ai.aicodermaster.model.vo.LoginUserVO;
+import com.ai.aicodermaster.model.vo.UserVO;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
 import com.ai.aicodermaster.model.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 /**
  * 用户 服务层。
@@ -63,5 +68,27 @@ public interface UserService extends IService<User> {
      */
     boolean userLogout(HttpServletRequest request);
 
+    /**
+     * 获取当前登录用户信息
+     *
+     * @param user 用户信息
+     * @return
+     */
+    UserVO getUserVO(User user);
 
+    /**
+     * 获取所有用户信息
+     *
+     * @param userList 用户列表
+     * @return
+     */
+    List<UserVO> getUserVOList(List<User> userList);
+
+    /**
+     * 获取用户查询条件
+     *
+     * @param userQueryRequest 用户查询请求
+     * @return
+     */
+    QueryWrapper getQueryWrapper(UserQueryRequest userQueryRequest);
 }
