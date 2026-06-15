@@ -1,6 +1,13 @@
 spring:
   application:
     name: ai-coder-master
+  # mysql
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ai_coder_master
+    username: root
+    password: Elysia520
+
 server:
   port: 8123
   servlet:
