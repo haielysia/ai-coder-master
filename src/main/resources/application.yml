@@ -7,6 +7,9 @@ spring:
     url: jdbc:mysql://localhost:3306/ai_coder_master
     username: root
     password: Elysia520
+  profiles:
+    active: local
+
 
 server:
   port: 8123
