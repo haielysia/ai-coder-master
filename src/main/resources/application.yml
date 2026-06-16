@@ -27,4 +27,10 @@ knife4j:
   setting:
     language: zh_cn
 
+langchain4j:
+  open-ai:
+    chat-model:
+      max-tokens: 8192
+
+
 
