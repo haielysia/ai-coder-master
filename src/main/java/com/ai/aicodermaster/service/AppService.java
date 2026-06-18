@@ -1,6 +1,5 @@
 package com.ai.aicodermaster.service;
 
-import com.ai.aicodermaster.model.dto.AppAdminQueryRequest;
 import com.ai.aicodermaster.model.dto.AppQueryRequest;
 import com.ai.aicodermaster.model.entity.User;
 import com.ai.aicodermaster.model.vo.AppVO;
@@ -49,4 +48,12 @@ public interface AppService extends IService<App> {
      * @return
      */
     Flux<String> chatToGenCode(Long appId, String message, User loginUser);
+
+    /**
+     * 部署服务
+     * @param appId
+     * @param loginUser
+     * @return
+     */
+    String deployApp(Long appId, User loginUser);
 }
