@@ -9,6 +9,14 @@ spring:
     password: Elysia520
   profiles:
     active: local
+  # redis
+  data:
+    redis:
+      host: 192.168.44.132
+      port: 6379
+      password: Elysia520
+      ttl: 3600
+
 
 
 server:
