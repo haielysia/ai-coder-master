@@ -16,6 +16,7 @@ import com.ai.aicodermaster.model.entity.ChatHistory;
 import com.ai.aicodermaster.mapper.ChatHistoryMapper;
 import com.ai.aicodermaster.service.ChatHistoryService;
 import jakarta.annotation.Resource;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 public class ChatHistoryServiceImpl extends ServiceImpl<ChatHistoryMapper, ChatHistory>  implements ChatHistoryService{
 
     @Resource
+    @Lazy
     private AppService appService;
 
     @Override

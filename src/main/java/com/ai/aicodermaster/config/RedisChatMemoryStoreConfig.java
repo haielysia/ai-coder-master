@@ -1,5 +1,6 @@
 package com.ai.aicodermaster.config;
 
+import com.ai.aicodermaster.ai.AiCodeGeneratorService;
 import dev.langchain4j.community.store.memory.chat.redis.RedisChatMemoryStore;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -17,17 +18,20 @@ public class RedisChatMemoryStoreConfig {
 
     private String password;
 
+    private String username;
+
     private long ttl;
 
     @Bean
     public RedisChatMemoryStore redisChatMemoryStore() {
         return RedisChatMemoryStore.builder()
-                .user("root")
+                .user(username)
                 .host(host)
                 .port(port)
                 .password(password)
                 .ttl(ttl)
                 .build();
     }
+
 }
 
