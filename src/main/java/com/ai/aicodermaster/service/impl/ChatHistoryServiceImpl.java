@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.ai.aicodermaster.exception.ErrorCode;
 import com.ai.aicodermaster.exception.ThrowUtils;
 import com.ai.aicodermaster.model.enums.ChatHistoryMessageTypeEnum;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.ai.aicodermaster.model.entity.ChatHistory;
 import com.ai.aicodermaster.mapper.ChatHistoryMapper;
@@ -35,5 +36,14 @@ public class ChatHistoryServiceImpl extends ServiceImpl<ChatHistoryMapper, ChatH
                 .build();
         return this.save(chatHistory);
     }
+
+    @Override
+    public boolean deleteByAppId(Long appId) {
+        ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.PARAMS_ERROR, "应用ID不能为空");
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .eq("appId", appId);
+        return this.remove(queryWrapper);
+    }
+
 
 }
