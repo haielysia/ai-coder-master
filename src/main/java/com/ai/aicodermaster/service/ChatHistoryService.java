@@ -1,7 +1,13 @@
 package com.ai.aicodermaster.service;
 
+import com.ai.aicodermaster.model.dto.ChatHistoryQueryRequest;
+import com.ai.aicodermaster.model.entity.User;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
 import com.ai.aicodermaster.model.entity.ChatHistory;
+
+import java.time.LocalDateTime;
 
 /**
  * 对话历史 服务层。
@@ -26,4 +32,23 @@ public interface ChatHistoryService extends IService<ChatHistory> {
      * @return
      */
     boolean deleteByAppId(Long appId);
+
+    /**
+     * 查询包装类
+     * @param chatHistoryQueryRequest
+     * @return
+     */
+    QueryWrapper getQueryWrapper(ChatHistoryQueryRequest chatHistoryQueryRequest);
+
+    /**
+     * 游标查询服务
+     * @param appId
+     * @param pageSize
+     * @param lastCreateTime
+     * @param loginUser
+     * @return
+     */
+    Page<ChatHistory> listAppChatHistoryByPage(Long appId, int pageSize,
+                                               LocalDateTime lastCreateTime,
+                                               User loginUser);
 }
