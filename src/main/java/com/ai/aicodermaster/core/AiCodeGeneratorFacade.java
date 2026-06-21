@@ -1,5 +1,6 @@
 package com.ai.aicodermaster.core;
 
+import cn.hutool.json.JSONUtil;
 import com.ai.aicodermaster.ai.AiCodeGeneratorService;
 import com.ai.aicodermaster.ai.AiCodeGeneratorServiceFactory;
 import com.ai.aicodermaster.ai.model.HtmlCodeResult;
@@ -7,8 +8,14 @@ import com.ai.aicodermaster.ai.model.MultiFileCodeResult;
 import com.ai.aicodermaster.exception.BusinessException;
 import com.ai.aicodermaster.exception.ErrorCode;
 import com.ai.aicodermaster.model.enums.CodeGenTypeEnum;
+import com.ai.aicodermaster.model.message.AiResponseMessage;
+import com.ai.aicodermaster.model.message.ToolExecutedMessage;
+import com.ai.aicodermaster.model.message.ToolRequestMessage;
 import com.ai.aicodermaster.parser.CodeParserExecutor;
 import com.ai.aicodermaster.saver.CodeFileSaverExecutor;
+import dev.langchain4j.model.chat.response.ChatResponse;
+import dev.langchain4j.service.TokenStream;
+import dev.langchain4j.service.tool.ToolExecution;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -111,6 +118,37 @@ public class AiCodeGeneratorFacade {
             }
         };
 
+    }
+
+    /**
+     * 将 TokenStream 转换为 Flux<String>，并传递工具调用信息
+     *
+     * @param tokenStream TokenStream 对象
+     * @return Flux<String> 流式响应
+     */
+    private Flux<String> processTokenStream(TokenStream tokenStream) {
+        return Flux.create(sink -> {
+            tokenStream.onPartialResponse((String partialResponse) -> {
+                        AiResponseMessage aiResponseMessage = new AiResponseMessage(partialResponse);
+                        sink.next(JSONUtil.toJsonStr(aiResponseMessage));
+                    })
+                    .onPartialToolExecutionRequest((index, toolExecutionRequest) -> {
+                        ToolRequestMessage toolRequestMessage = new ToolRequestMessage(toolExecutionRequest);
+                        sink.next(JSONUtil.toJsonStr(toolRequestMessage));
+                    })
+                    .onToolExecuted((ToolExecution toolExecution) -> {
+                        ToolExecutedMessage toolExecutedMessage = new ToolExecutedMessage(toolExecution);
+                        sink.next(JSONUtil.toJsonStr(toolExecutedMessage));
+                    })
+                    .onCompleteResponse((ChatResponse response) -> {
+                        sink.complete();
+                    })
+                    .onError((Throwable error) -> {
+                        error.printStackTrace();
+                        sink.error(error);
+                    })
+                    .start();
+        });
     }
 
     /**
