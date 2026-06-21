@@ -28,6 +28,9 @@ public class AiCodeGeneratorServiceFactory {
     private StreamingChatModel streamingChatModel;
 
     @Resource
+    private StreamingChatModel openAiStreamingChatModel;
+
+    @Resource
     private RedisChatMemoryStore redisChatMemoryStore;
 
     /**
