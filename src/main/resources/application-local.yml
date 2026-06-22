@@ -14,3 +14,12 @@ langchain4j:
       max-tokens: 8192
       log-requests: true
       log-responses: true
+
+# 添加 COS 对象存储配置（需要从腾讯云获取）
+cos:
+  client:
+    host: picture-1445778052.cos.ap-shanghai.myqcloud.com
+    secretId: ${TENCENT_SECRET_ID}
+    secretKey: ${TENCENT_SECRET_KEY}
+    region: ap-shanghai
+    bucket: picture-1445778052
