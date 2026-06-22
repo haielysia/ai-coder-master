@@ -1,5 +1,6 @@
 package com.ai.aicodermaster.service;
 
+import com.ai.aicodermaster.model.dto.AppAddRequest;
 import com.ai.aicodermaster.model.dto.AppQueryRequest;
 import com.ai.aicodermaster.model.entity.User;
 import com.ai.aicodermaster.model.vo.AppVO;
@@ -58,4 +59,6 @@ public interface AppService extends IService<App> {
     String deployApp(Long appId, User loginUser);
 
     void generateAppScreenshotAsync(Long appId, String appUrl);
+
+    Long createApp(AppAddRequest appAddRequest, User loginUser);
 }
