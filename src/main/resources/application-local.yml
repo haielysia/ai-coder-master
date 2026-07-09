@@ -23,3 +23,7 @@ cos:
     secretKey: ${TENCENT_SECRET_KEY}
     region: ap-shanghai
     bucket: picture-1445778052
+
+# Pexels 图片搜索配置
+pexels:
+  api-key: SKf0lozVbOhsE6u9CSJlC5hfaQcQKKlBpHdQ38K0ocrkRIu3oOyFVI1P
