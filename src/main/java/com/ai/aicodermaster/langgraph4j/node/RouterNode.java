@@ -1,6 +1,7 @@
 package com.ai.aicodermaster.langgraph4j.node;
 
 import com.ai.aicodermaster.ai.AiCodeGenTypeRoutingService;
+import com.ai.aicodermaster.ai.AiCodeGenTypeRoutingServiceFactory;
 import com.ai.aicodermaster.langgraph4j.state.WorkflowContext;
 import com.ai.aicodermaster.model.enums.CodeGenTypeEnum;
 import com.ai.aicodermaster.utils.SpringContextUtil;
@@ -20,8 +21,9 @@ public class RouterNode {
 
             CodeGenTypeEnum generationType;
             try {
-                // 获取AI路由服务
-                AiCodeGenTypeRoutingService routingService = SpringContextUtil.getBean(AiCodeGenTypeRoutingService.class);
+                // 获取AI路由服务工厂并创建新的路由服务实例
+                AiCodeGenTypeRoutingServiceFactory factory = SpringContextUtil.getBean(AiCodeGenTypeRoutingServiceFactory.class);
+                AiCodeGenTypeRoutingService routingService = factory.createAiCodeGenTypeRoutingService();
                 // 根据原始提示词进行智能路由
                 generationType = routingService.routeCodeGenType(context.getOriginalPrompt());
                 log.info("AI智能路由完成，选择类型: {} ({})", generationType.getValue(), generationType.getText());
