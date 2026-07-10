@@ -1,5 +1,6 @@
 package com.ai.aicodermaster.langgraph4j.state;
 
+import com.ai.aicodermaster.langgraph4j.model.ImageCollectionPlan;
 import com.ai.aicodermaster.langgraph4j.model.ImageResource;
 import com.ai.aicodermaster.langgraph4j.model.QualityResult;
 import com.ai.aicodermaster.model.enums.CodeGenTypeEnum;
@@ -77,6 +78,20 @@ public class WorkflowContext implements Serializable {
      * 质量检查结果
      */
     private QualityResult qualityResult;
+
+    /**
+     * 图片收集计划
+     */
+    private ImageCollectionPlan imageCollectionPlan;
+
+
+    /**
+     * 并发图片收集的中间结果字段
+     */
+    private List<ImageResource> contentImages;
+    private List<ImageResource> illustrations;
+    private List<ImageResource> diagrams;
+    private List<ImageResource> logos;
 
 
     @Serial
