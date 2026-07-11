@@ -46,6 +46,7 @@ langchain4j:
   open-ai:
     chat-model:
       max-tokens: 8192
+      max-retries: 3
 
 
 

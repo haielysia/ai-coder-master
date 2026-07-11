@@ -1,6 +1,7 @@
 package com.ai.aicodermaster.ai;
 
 import com.ai.aicodermaster.ai.guardrail.PromptSafetyInputGuardrail;
+import com.ai.aicodermaster.ai.guardrail.RetryOutputGuardrail;
 import com.ai.aicodermaster.ai.tools.*;
 import com.ai.aicodermaster.exception.BusinessException;
 import com.ai.aicodermaster.exception.ErrorCode;
@@ -122,7 +123,10 @@ public class AiCodeGeneratorServiceFactory {
                         .chatModel(chatModel)
                         .streamingChatModel(openAiStreamingChatModel)
                         .chatMemory(chatMemory)
+                        .inputGuardrails(new PromptSafetyInputGuardrail())
+                        .outputGuardrails(new RetryOutputGuardrail())
                         .build();
+
             }
             default -> throw new BusinessException(ErrorCode.SYSTEM_ERROR,
                     "不支持的代码生成类型: " + codeGenType.getValue());
