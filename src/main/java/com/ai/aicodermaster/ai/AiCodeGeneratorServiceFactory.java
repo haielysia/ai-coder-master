@@ -1,5 +1,6 @@
 package com.ai.aicodermaster.ai;
 
+import com.ai.aicodermaster.ai.guardrail.PromptSafetyInputGuardrail;
 import com.ai.aicodermaster.ai.tools.*;
 import com.ai.aicodermaster.exception.BusinessException;
 import com.ai.aicodermaster.exception.ErrorCode;
@@ -111,9 +112,7 @@ public class AiCodeGeneratorServiceFactory {
                         .streamingChatModel(reasoningStreamingChatModel)
                         .chatMemoryProvider(memoryId -> chatMemory)
                         .tools(toolManager.getAllTools())
-                        .hallucinatedToolNameStrategy(toolExecutionRequest -> ToolExecutionResultMessage.from(
-                                toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
-                        ))
+                        .inputGuardrails(new PromptSafetyInputGuardrail())  // 添加输入护轨
                         .build();
             }
             case HTML, MULTI_FILE -> {
