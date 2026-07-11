@@ -5,6 +5,8 @@ import com.ai.aicodermaster.ai.AiCodeGeneratorService;
 import com.ai.aicodermaster.ai.AiCodeGeneratorServiceFactory;
 import com.ai.aicodermaster.ai.model.HtmlCodeResult;
 import com.ai.aicodermaster.ai.model.MultiFileCodeResult;
+import com.ai.aicodermaster.constant.AppConstant;
+import com.ai.aicodermaster.core.builder.VueProjectBuilder;
 import com.ai.aicodermaster.exception.BusinessException;
 import com.ai.aicodermaster.exception.ErrorCode;
 import com.ai.aicodermaster.model.enums.CodeGenTypeEnum;
@@ -32,6 +34,9 @@ public class AiCodeGeneratorFacade {
 
     @Resource
     private AiCodeGeneratorService aiCodeGeneratorService;
+
+    @Resource
+    private VueProjectBuilder vueProjectBuilder;
 
     /**
      * 统一入口：根据类型生成并保存代码
@@ -126,7 +131,7 @@ public class AiCodeGeneratorFacade {
      * @param tokenStream TokenStream 对象
      * @return Flux<String> 流式响应
      */
-    private Flux<String> processTokenStream(TokenStream tokenStream) {
+    private Flux<String> processTokenStream(TokenStream tokenStream, Long appId) {
         return Flux.create(sink -> {
             tokenStream.onPartialResponse((String partialResponse) -> {
                         AiResponseMessage aiResponseMessage = new AiResponseMessage(partialResponse);
@@ -141,8 +146,12 @@ public class AiCodeGeneratorFacade {
                         sink.next(JSONUtil.toJsonStr(toolExecutedMessage));
                     })
                     .onCompleteResponse((ChatResponse response) -> {
+                        // 执行 Vue 项目构建（同步执行，确保预览时项目已就绪）
+                        String projectPath = AppConstant.CODE_OUTPUT_ROOT_DIR + File.separator + "vue_project_" + appId;
+                        vueProjectBuilder.buildProject(projectPath);
                         sink.complete();
                     })
+
                     .onError((Throwable error) -> {
                         error.printStackTrace();
                         sink.error(error);

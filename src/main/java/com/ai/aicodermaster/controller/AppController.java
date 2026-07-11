@@ -17,6 +17,8 @@ import com.ai.aicodermaster.model.entity.App;
 import com.ai.aicodermaster.model.entity.User;
 import com.ai.aicodermaster.model.enums.CodeGenTypeEnum;
 import com.ai.aicodermaster.model.vo.AppVO;
+import com.ai.aicodermaster.ratelimter.annotation.RateLimit;
+import com.ai.aicodermaster.ratelimter.enums.RateLimitType;
 import com.ai.aicodermaster.service.AppService;
 import com.ai.aicodermaster.service.ProjectDownloadService;
 import com.ai.aicodermaster.service.UserService;
@@ -25,6 +27,7 @@ import com.mybatisflex.core.query.QueryWrapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
@@ -175,6 +178,11 @@ public class AppController {
      * @return 精选应用列表
      */
     @PostMapping("/good/list/page/vo")
+    @Cacheable(
+            value = "good_app_page",
+            key = "T(com.yupi.yuaicodemother.utils.CacheKeyUtils).generateKey(#appQueryRequest)",
+            condition = "#appQueryRequest.pageNum <= 10"
+    )
     public BaseResponse<Page<AppVO>> listGoodAppVOByPage(@RequestBody AppQueryRequest appQueryRequest) {
         ThrowUtils.throwIf(appQueryRequest == null, ErrorCode.PARAMS_ERROR);
         // 限制每页最多 20 个
@@ -192,8 +200,6 @@ public class AppController {
         appVOPage.setRecords(appVOList);
         return ResultUtils.success(appVOPage);
     }
-
-
 
     // ==================== 管理员接口 ====================
 
@@ -322,7 +328,9 @@ public class AppController {
                             .build();
                 });
     }*/
+
     @GetMapping(value = "/chat/gen/code", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @RateLimit(limitType = RateLimitType.USER, rate = 5, rateInterval = 60, message = "AI 对话请求过于频繁，请稍后再试")
     public Flux<ServerSentEvent<String>> chatToGenCode(@RequestParam Long appId,
                                                        @RequestParam String message,
                                                        HttpServletRequest request) {
