@@ -1,0 +1,13 @@
+package com.ai.aicodeuser.mapper;
+
+import com.mybatisflex.core.BaseMapper;
+import com.ai.aicodermaster.model.entity.User;
+
+/**
+ * 用户 映射层。
+ *
+ * @author <a href="https://github.com/haielysia">hby</a>
+ */
+public interface UserMapper extends BaseMapper<User> {
+
+}
