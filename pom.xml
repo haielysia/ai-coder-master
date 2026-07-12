@@ -11,6 +11,7 @@
     <groupId>com.ai</groupId>
     <artifactId>ai-coder-master</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <name>ai-coder-master</name>
     <description>ai-coder-master</description>
     <url/>
@@ -20,6 +21,9 @@
     <developers>
         <developer/>
     </developers>
+    <modules>
+        <module>ai-code-master-microservice</module>
+    </modules>
     <scm>
         <connection/>
         <developerConnection/>
